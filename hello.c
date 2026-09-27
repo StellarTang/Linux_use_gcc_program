@@ -132,6 +132,123 @@ void test_onedirectional_linked_list()
 
 
 
+typedef struct bidirectional_linked_list
+{
+	int data;
+	struct bidirectional_linked_list *next;
+	struct bidirectional_linked_list *prev;
+} node_bi_t;
+
+node_bi_t * create_node_bi(int data)
+{
+	node_bi_t *new_node = (node_bi_t *)malloc(sizeof(node_bi_t));
+	if (new_node == NULL)
+	{
+		fprintf(stderr, "Memory allocation failed\n");
+		exit(EXIT_FAILURE);
+	}
+	new_node->data = data;
+	new_node->next = NULL;
+	new_node->prev = NULL;
+	return new_node;
+}
+
+
+void addTail_bi(node_bi_t *head, int data)
+{
+	node_bi_t *new_node = create_node_bi(data);
+	node_bi_t *current = head;
+	while (current->next != NULL)
+	{
+		current = current->next;
+	}
+	current->next = new_node;
+	new_node->prev = current;
+}
+
+
+void addHead_bi(node_bi_t **head, int data)
+{
+	node_bi_t *new_node = create_node_bi(data);
+	new_node->next = *head;
+	if (*head != NULL)
+	{
+		(*head)->prev = new_node;
+	}
+	*head = new_node;
+}
+
+void changeData_bi(node_bi_t *head, int old_data, int new_data)
+{
+	node_bi_t *current = head;
+	while (current != NULL)
+	{
+		if (current->data == old_data)
+		{
+			current->data = new_data;
+			return;
+		}
+		current = current->next;
+	}
+}
+
+void deleteNode_bi(node_bi_t **head, int data)
+{
+	node_bi_t *current = *head;
+
+	while (current != NULL && current->data != data)
+	{
+		current = current->next;
+	}
+
+	if (current == NULL) // Data not found
+		return;
+
+	if (current->prev != NULL) // Not the head node
+	{
+		current->prev->next = current->next;
+	}
+	else // Deleting the head node
+	{
+		*head = current->next;
+	}
+
+	if (current->next != NULL) // Not the tail node
+	{
+		current->next->prev = current->prev;
+	}
+
+	free(current);
+}
+
+void print_list_bi(node_bi_t *head)
+{
+	node_bi_t *current = head;
+	while (current != NULL)
+	{
+		printf("%d <-> ", current->data);
+		current = current->next;
+	}
+	printf("NULL\n");
+}
+
+void test_bidirectional_linked_list()
+{
+	node_bi_t *head = NULL;
+	print_list_bi(head);
+	addHead_bi(&head, 1);
+	print_list_bi(head);
+	
+	addTail_bi(head, 2);
+	print_list_bi(head);
+	addTail_bi(head, 3);
+	print_list_bi(head);
+	addHead_bi(&head, 4);
+	print_list_bi(head);
+
+	changeData_bi(head, 2, 5);
+	print_list_bi(head);
+}
 
 
 
@@ -148,7 +265,7 @@ int main(void)
     	}
 
 	test_onedirectional_linked_list();
-
+	test_bidirectional_linked_list();
 
 	return 0;
 }
