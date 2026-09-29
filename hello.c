@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
-
+#include <unistd.h>
 
 typedef struct onedirectional_linked_list
 {
@@ -66,7 +66,10 @@ void deleteNode(node_t **head, int data)
 	}
 
 	if (current == NULL) // Data not found
+	{
+		printf("Data %d not found in the list.\n", data);
 		return;
+	}
 
 	if (prev == NULL) // Deleting the head node
 	{
@@ -250,22 +253,78 @@ void test_bidirectional_linked_list()
 	print_list_bi(head);
 }
 
-
-
-
-
-
-int main(void)
+void test_argc_argv(int argc, char *argv[])
 {
-	printf("Hello world !\n");
+	printf("argc = %d\n", argc);
+	for (int i = 0; i < argc; i++)
+	{
+		printf("argv[%d] = %s\n", i, argv[i]);
+	}
+}
 
-	for(int i = 0; i < 5; i++)
-    	{
-        	printf("count = %d\n", i);
-    	}
+void test_getopt(int argc, char *argv[])
+{
+	int opt;
+	while ((opt = getopt(argc, argv, "r:m:o:h")) != -1)
+	{
+		switch (opt)
+		{
+			case 'r':
+				printf("Option -r with value: %s\n", optarg);
+				break;	
+			case 'm':
+				printf("Option -m with value: %s\n", optarg);
+				break;
+			case 'o':
+				printf("Option -o with value: %s\n", optarg);
+				break;
+			case 'h':
+				printf("Option -h (help) selected\n");
+				break;
+			default:
+				fprintf(stderr, "Usage: %s [-r value] [-m value] [-o value] [-h]\n", argv[0]);
+				exit(EXIT_FAILURE);
+		}
+	}
+}
 
-	test_onedirectional_linked_list();
-	test_bidirectional_linked_list();
+
+int test_getopt_with_args(int argc, char *argv[])
+{
+	int opt;
+	while ((opt = getopt(argc, argv, "r:m:o:h")) != -1)
+	{
+		switch (opt)
+		{
+			case 'r':
+				printf("Option -r with value: %s\n", optarg);
+				break;	
+			case 'm':
+				printf("Option -m with value: %s\n", optarg);
+				break;
+			case 'o':
+				printf("Option -o with value: %s\n", optarg);
+				break;
+			case 'h':
+				printf("Option -h (help) selected\n");
+				break;
+			default:
+				fprintf(stderr, "Usage: %s [-r value] [-m value] [-o value] [-h]\n", argv[0]);
+				exit(EXIT_FAILURE);
+		}
+	}
+	return 0;
+}
+
+
+
+int main(int argc, char *argv[])
+{
+	test_argc_argv(argc, argv);
+	test_getopt(argc, argv);
+
+	// test_onedirectional_linked_list();
+	// test_bidirectional_linked_list();
 
 	return 0;
 }
