@@ -28,8 +28,9 @@ all: $(TARGET)
 # $^ 当前目标的所有依赖文件	即%.c,test1.c test2.c
 # $< 当前目标的第一个依赖文件即%.c,test1.c
 
+# 	$(CC) $(CFLAGS) -c $< -o $@	# 编译.c文件为.o文件
 $(OBJ_DIR)/%.o : $(SRC_DIR)/%.c
-	$(CC) $(CFLAGS) -c $< -o $@	# 编译.c文件为.o文件
+	$(CC) $(CFLAGS) -c $< -o $@ -MMD -MF $(@:.o=.d)  # 编译.c文件为.o文件，并生成依赖文件(.d)
 
 $(TARGET): $(OBJS)
 	$(CC) $^ -o $@  # 链接所有.o
@@ -81,6 +82,10 @@ test7:
 	@echo "OBJS: $(OBJS)"	
 	@echo "DEPS: $(DEPS)"
 
+
+# test8:
+# 	build/object/%.o: source/%.c | build/object
+# 		$(CC) $(CFLAGS) -c $< -o $@ -MMD -MF $(@:.o=.d)
 
 # ```
 # app: main.c
