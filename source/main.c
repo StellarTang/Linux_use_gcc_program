@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include "onedirectional_linked_list.h"
 #include "bidirectional_linked_list.h"
-
+#include "pointer.h"
 
 
 void test_getopt(int argc, char *argv[])
@@ -45,12 +45,17 @@ void test_argc_argv(int argc, char *argv[])
 
 int main(int argc, char *argv[])
 {
+	// test_argc_argv(argc, argv);
 
-	test_argc_argv(argc, argv);
-	test_getopt(argc, argv);
+	// test_arr();
+	// test_pointer_arr();
+	// test_arr_pointer();
 
-	test_onedirectional_linked_list();
-	test_bidirectional_linked_list();
+	test_function_pointer();
+	// test_getopt(argc, argv);
+
+	// test_onedirectional_linked_list();
+	// test_bidirectional_linked_list();
 
 	return 0;
 }
