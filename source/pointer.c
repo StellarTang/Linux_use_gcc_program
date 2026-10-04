@@ -134,3 +134,63 @@ void test_function_pointer()
     printf("static_value = %d\n", static_value);
 }
 
+
+
+/*#
+：：：：：指针退化：：：：：：
+> 
+> 退化的原因**不是赋值**，不是 “类型不一致才退化”
+> **退化规则（C 标准）：**
+> 数组名在**表达式中**，除下面 3 种特例，全部自动转为指向首元素的指针：
+
+1. `sizeof(数组名)` 👉 不退化！取整个数组字节大小
+2. `&数组名`        👉 不退化！取**整个数组的地址**
+3. 数组初始化 `char s[]="abc"` 这种初始化列表场景
+
+👉 只要不是上面 3 种，只要数组名放在表达式里（赋值右边、函数传参、加减运算），都会退化。
+
+**退化和两边类型是否匹配没关系！**
+哪怕你写错类型，退化照样发生，只是编译报警告：*/
+void test_one_dementional_pointer_degrade()
+{
+    int test_a[10] = {1, 2, 3, 4, 5};
+
+    int *p1 = test_a;
+    printf("pointer test_a = %x\n", p1);
+    printf("pointer test_a = %x\n", p1 + 1);
+
+    int *p2 = &test_a;
+    printf("pointer &test_a = %x\n", p2);
+    printf("pointer &test_a = %x\n", p2 + 1);
+}
+
+void test_two_dementional_pointer_degrade()
+{
+    int test_a[10][100] = {
+        {1, 2, 3, 4, 5}
+
+    };
+
+    // int *p1 = test_a;
+    // printf("pointer test_a = %x\n", p1);
+    // printf("pointer test_a = %x\n", p1 + 1);
+
+    // int *p2 = &test_a;
+    // printf("pointer &test_a = %x\n", p2);
+    // printf("pointer &test_a = %x\n", p2 + 1);
+
+    int (*p1)[100] = test_a;
+    int (*p3)[100] = test_a + 1;
+    // printf("pointer test_a = %x\n", p1);
+    // printf("pointer test_a = %x\n", p1 + 1);
+    printf("pointer test_a = %x\n", test_a);
+    printf("pointer test_a = %x\n", test_a + 1);
+    printf(" test_a = %d\n", (void *)p3 - (void *)p1);
+
+    // printf("pointer &test_a = %x\n", p2);
+    // printf("pointer &test_a = %x\n", p2 + 1);
+    printf("pointer test_a = %x\n", &test_a);
+    printf("pointer test_a = %x\n", &test_a + 1);
+    printf(" test_a = %d\n",(void *) (&test_a + 1) - (void *)&test_a);
+
+}

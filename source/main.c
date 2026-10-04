@@ -51,7 +51,10 @@ int main(int argc, char *argv[])
 	// test_pointer_arr();
 	// test_arr_pointer();
 
-	test_function_pointer();
+	// test_function_pointer();
+	// test_one_dementional_pointer_degrade();
+	test_two_dementional_pointer_degrade();
+
 	// test_getopt(argc, argv);
 
 	// test_onedirectional_linked_list();
